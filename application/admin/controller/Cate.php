@@ -40,7 +40,7 @@ class Cate extends Common
             }
         }
         //栏目获取
-        $cateRes = db('cate')->select();
+        $cateRes = model('cate')->catetree();
         $this->assign('cateRes',$cateRes);
         return view();
     }
