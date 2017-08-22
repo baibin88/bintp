@@ -53,3 +53,17 @@
     })
 
   }
+  //栏目显示和隐藏
+  function cate_ststus(obj,id){
+    var url  = SCOPE.status_url;
+    var data = {cateid:id};
+    $.post(url,data,function(data){
+      if(data.msg ==200){
+        $(obj).attr("class","btn btn-danger btn-sm shiny");
+        $(obj).text('隐藏');
+      }else if(data.msg==201){
+        $(obj).attr("class","btn btn-primary btn-sm shiny");
+        $(obj).text('显示');
+      }
+    })
+  }

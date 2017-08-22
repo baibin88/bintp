@@ -5,9 +5,14 @@ class Cate extends Common
 {
     public  function index()
     {
+        $cateRes = model('cate')->catetree();
+        $this->assign('cateRes',$cateRes);
         return view();
     }
-
+    /**
+     * [upimg 栏目图片上传]
+     * @return [type] [description]
+     */
     public function  upimg()
     {
         $file = request()->file('file');
@@ -23,6 +28,9 @@ class Cate extends Common
 
         }
     }
+    /**
+     * [add 增加数据]
+     */
     public function add()
     {
         if(request()->isPost()){
@@ -43,6 +51,29 @@ class Cate extends Common
         $cateRes = model('cate')->catetree();
         $this->assign('cateRes',$cateRes);
         return view();
+    }
+    /**
+     * [cateStatus 栏目状态]
+     * @return [type] [description]
+     */
+    public function cateStatus()
+    {
+        if(request()->isAjax()){
+            $cateid = input('cateid');
+            $data = db('cate')->field('status')->where(array('id'=>$cateid))->find();
+            $status = $data['status'];
+            if($status ==1){
+                $data['status'] = '0';
+                db('cate')->where(array('id'=>$cateid))->update($data);
+                return json(array('msg'=>'200','text'=>'隐藏成功'));
+            }else{
+                $data['status'] = '1';
+                db('cate')->where(array('id'=>$cateid))->update($data);
+                return json(array('msg'=>'201','text'=>'显示成功'));
+            }
+        }else{
+            return json(array('msg'=>'202','text'=>'访问方式错误'));
+        }
     }
 
 }

@@ -14,10 +14,10 @@ class Cate extends Model
      * [cateSort 进行排序]
      * @param  [type]  $cateRes   [传递过的栏目数据]
      * @param  [type]  $pid   [上级栏目ID 默认值0]
-     * @param  integer $level [级别 默认值 1]
+     * @param  integer $level [级别 默认值 0]
      * @return [type]         [description]
      */
-    public function cateSort($cateRes,$pid=0,$level=1)
+    public function cateSort($cateRes,$pid=0,$level=0)
     {
         static $arr = array();
         foreach ($cateRes as $key => $value) {

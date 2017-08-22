@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <title>ThinkPHP5.0</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <
+</head>
+<body>
+    <!-- 头部 -->
+{include file="common/header"}
+
+    <!-- /头部 -->
+
+    <div class="main-container container-fluid">
+        <div class="page-container">
+            <!-- Page Sidebar -->
+           {include file="common/left"}
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                    <li>
+                        <a href="{:url('Index/index')}">系统</a>
+                    </li>
+                        <li class="active"><a href="{:url('Cate/index')}">栏目管理</a></li>
+                        <li class="active">栏目列表</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+
+<button type="button" tooltip="添加栏目" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('Cate/add')}'"> <i class="fa fa-plus"></i> 添加栏目
+</button>
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="flip-scroll">
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center" width="5%">
+                                    <label>
+                                        <input name="contactway[]" value="" type="checkbox" class="colred-blue">
+                                        <span class="text"></span>
+                                    </label>
+                                </th>
+                                <th class="text-center" width="8%">ID</th>
+                                <th class="text-center" >栏目</th>
+                                <th class="text-center" width="10%">状态</th>
+                                <th class="text-center" width="10%">属性</th>
+                                <th class="text-center" width="10%">所属模型</th>
+                                <th class="text-center" width="2%">排序</th>
+                                <th class="text-center" width="18%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist name="cateRes" id="cate"}
+                             <tr>
+                                <td align="center">
+                                    <label>
+                                        <input name="contactway[]" value="" type="checkbox" class="colred-blue">
+                                        <span class="text"></span>
+                                    </label>
+                                </td>
+                                <td align="center">{$cate.id}</td>
+                                <td ><?php echo str_repeat('-',$cate['level']*4)?><a href="javascript::">{$cate.cate_name}</a></td>
+                                <td align="center"><a onclick="cate_ststus(this,'{$cate.id}')" {if condition="$cate['status'] eq 1"} class="btn btn-primary btn-sm shiny" {else/} class="btn btn-danger btn-sm shiny" {/if} > {if condition="$cate['status'] eq 1"}显示{else/}隐藏{/if}</a></td>
+                                <td align="center">{if condition="$cate['cate_attr'] eq 1"} 列表栏目{else/}频道封面{/if}</td>
+                                <td align="center">test</td>
+                                <td align="center"><input style="width: 40px ;text-align:center;" type="text" value="1"></td>
+                                <td align="center">
+                                    <a href="/admin/user/edit/id/6.html" class="btn btn-primary btn-sm shiny">
+                                        <i class="fa fa-edit"></i> 编辑
+                                    </a>
+                                    <a href="#" onClick="warning('确实要删除吗', '/admin/user/del/id/6.html')" class="btn btn-danger btn-sm shiny">
+                                        <i class="fa fa-trash-o"></i> 删除
+                                    </a>
+                                </td>
+                            </tr>
+                        {/volist}
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>
+    </div>
+
+        <!--Basic Scripts-->
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <script src="__ADMIN__/style/jquery.js"></script>
+    <script src="__ADMIN__/style/common.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    <script>
+    var SCOPE = {
+        'status_url' : "{:url('Cate/cateStatus')}",
+      }
+
+
+</script>
+
+
+</body></html>
