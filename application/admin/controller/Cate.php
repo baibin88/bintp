@@ -26,14 +26,22 @@ class Cate extends Common
     public function add()
     {
         if(request()->isPost()){
-           $data = input('post.');
-           $add = db('cate')->insert($data);
-           if($add){
-                $this->success('添加栏目成功',url('index'));
-           }else{
-                $this->error('添加栏目失败');
-           }
+            $data = input('post.');
+            //判断栏目名不为空
+            if(isset($dta['cate_name']) || !$data['cate_name']){
+               return json(array('msg'=>'202','text'=>'栏目名称不能为空'));
+            }
+            //插入数据
+            $add = db('cate')->insert($data);
+            if($add){
+                return json(array('msg'=>'200','text'=>'添加栏目成功'));
+            }else{
+                return json(array('msg'=>'201','text'=>'添加栏目失败'));
+            }
         }
+        //栏目获取
+        $cateRes = db('cate')->select();
+        $this->assign('cateRes',$cateRes);
         return view();
     }
 
