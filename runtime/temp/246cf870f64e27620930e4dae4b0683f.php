@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:72:"/Users/yinbin/Code/bintp/public/../application/admin/view/cate/index.htm";i:1503327390;s:75:"/Users/yinbin/Code/bintp/public/../application/admin/view/common/header.htm";i:1498214292;s:73:"/Users/yinbin/Code/bintp/public/../application/admin/view/common/left.htm";i:1499956419;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:72:"/Users/yinbin/Code/bintp/public/../application/admin/view/cate/index.htm";i:1503371219;s:75:"/Users/yinbin/Code/bintp/public/../application/admin/view/common/header.htm";i:1498214292;s:73:"/Users/yinbin/Code/bintp/public/../application/admin/view/common/left.htm";i:1499956419;}*/ ?>
 <!DOCTYPE html>
 <html><head>
     <meta charset="utf-8">
@@ -230,7 +230,7 @@
 
                             <div class="widget-body">
                                 <div id="horizontal-form">
-                                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                                    <form class="form-horizontal" role="form" action="<?php echo url('Cate/add'); ?>" method="post" enctype="multipart/form-data">
                                         <div class="tabbable">
                                             <ul class="nav nav-tabs tabs-flat" id="myTab11">
                                                 <li class="active">
@@ -252,10 +252,20 @@
                                             <div class="tab-content tabs-flat">
                                                 <div id="home11" class="tab-pane active">
                                                     <div class="form-group">
+                                                        <label for="username" class="col-sm-2 control-label no-padding-right">所属模型</label>
+                                                        <div class="col-sm-6">
+                                                            <select name="model_id">
+                                                                <option value="1">文章模型</option>
+                                                                <option value="2">电影模型</option>
+                                                            </select>
+                                                        </div>
+                                                        <p class="help-block col-sm-4 red">* 必填</p>
+                                                    </div>
+                                                     <div class="form-group">
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">上级栏目</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <select name="" id="">
+                                                            <select name="pid">
                                                                 <option value="0">顶级栏目</option>
                                                             </select>
                                                         </div>
@@ -265,7 +275,7 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目名称</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control" id="username" placeholder="" name="siturl" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="cate_name" type="text" value="">
                                                         </div>
                                                         <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
@@ -274,7 +284,7 @@
                                                         <div class="col-sm-6" style="float: left; padding-left:10px;top: 6px;" >
                                                             <!--单行文本-->
                                                             <label >
-                                                                <input class="checkbox-slider colored-blue" type="checkbox">
+                                                                <input value="0"  name="status" class="checkbox-slider colored-blue" type="checkbox">
                                                                 <span class="text"></span>
                                                             </label>
                                                         </div>
@@ -284,10 +294,10 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目图片</label>
                                                         <div class="col-sm-6" style="top: 6px;">
                                                             <!--单行文本-->
-                                                            <input type="file" name="file" id="imgFile" style="display:none"/>
+                                                            <input type="file" name="file" id="imgFile" value="" style="display:none"/>
                                                             <input type="button" value="图片上传" onclick="upload()">
+                                                            <input type="hidden" name="img" value="" id="imgcat">
                                                         </div>
-                                                        <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
                                                      <div class="form-group" id="cateimgdiv" style="display: none;">
                                                         <label for="username" class="col-sm-2 control-label no-padding-right"></label>
@@ -303,13 +313,13 @@
                                                             <!--单行文本-->
                                                             <div class="radio" style="float: left; padding-left:10px ">
                                                                 <label>
-                                                                    <input name="iscach[]" type="radio" class="colored-blue" value="是">
-                                                                    <span class="text"> 列表页栏目</span>
+                                                                    <input name="cate_attr"  value="1" type="radio" checked="checked" >
+                                                                    <span class="text"> 列表页栏目(可以发表文章)</span>
                                                                 </label>
                                                             </div>
                                                             <div class="radio" style="float: left; padding-left:10px ">
                                                                 <label>
-                                                                    <input name="iscach[]" type="radio" class="colored-blue" value="是">
+                                                                    <input  name="cate_attr"  value="2"  type="radio" class="inverted" >
                                                                     <span class="text"> 封面频道栏目</span>
                                                                 </label>
                                                             </div>
@@ -321,14 +331,15 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">列表页模板</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control" id="username" placeholder="" name="siturl" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="list_tmp" type="text" value="">
                                                         </div>
+                                                          <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">频道页模板</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control" id="username" placeholder="" name="siturl" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="index_tmp" type="text" value="">
                                                         </div>
                                                         <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
@@ -336,7 +347,7 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">内容页模板</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control" id="username" placeholder="" name="siturl" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="article_tmp" type="text" value="">
                                                         </div>
                                                         <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
@@ -348,25 +359,22 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目标题</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control" id="username" placeholder="" name="siturl" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="title" type="text" value="">
                                                         </div>
-                                                        <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目关键词</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control" id="username" placeholder="" name="siturl" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="keywords" type="text" value="">
                                                         </div>
-                                                        <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目描述</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <textarea name="" class="form-control" id="" ></textarea>
+                                                            <textarea name="desc" class="form-control" id="" ></textarea>
                                                         </div>
-                                                        <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
                                                 </div>
                                                 <div id="profile12" class="tab-pane">
@@ -375,7 +383,7 @@
 
                                                             <div class="widget-body">
                                                                 <div class="widget-main no-padding">
-                                                                    <div id="summernote"></div>
+                                                                    <textarea name="content" id="summernote" ></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>

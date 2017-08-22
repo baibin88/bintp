@@ -25,6 +25,15 @@ class Cate extends Common
     }
     public function add()
     {
+        if(request()->isPost()){
+           $data = input('post.');
+           $add = db('cate')->insert($data);
+           if($add){
+                $this->success('添加栏目成功',url('index'));
+           }else{
+                $this->error('添加栏目失败');
+           }
+        }
         return view();
     }
 
