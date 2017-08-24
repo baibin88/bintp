@@ -21,6 +21,7 @@
     <script src="__ADMIN__/puls/ueditor/ueditor.config.js"></script>
     <script src="__ADMIN__/puls/ueditor/ueditor.all.min.js"></script>
     <script src="__ADMIN__/puls/ueditor/lang/zh-cn/zh-cn.js"></script>
+
 </head>
 <body>
 <!-- 头部 -->
@@ -90,9 +91,7 @@
                                                             <!--单行文本-->
                                                             <select name="pid">
                                                                 <option value="0">顶级栏目</option>
-                                                                {volist name="cateRes" id="cate"}
-                                                                    <option {if condition="$cate['id'] eq $cateid"} selected="selected" {/if} value="{$cate.id}"><?php echo str_repeat('-',$cate['level']*4)?>{$cate.cate_name}</option>
-                                                                {/volist}
+                                                                   <option></option>
                                                             </select>
                                                         </div>
                                                         <p class="help-block col-sm-4 red">* 必填</p>
@@ -101,7 +100,7 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目名称</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control"  placeholder="" name="cate_name" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="cate_name" type="text" value="{$cates.cate_name}">
                                                         </div>
                                                         <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
@@ -139,19 +138,20 @@
                                                             <!--单行文本-->
                                                             <div class="radio" style="float: left; padding-left:10px ">
                                                                 <label>
-                                                                    <input name="cate_attr"  value="1" type="radio" checked="checked" >
+                                                                    <input name="cate_attr"  value="1" type="radio"
+                                                                    {if condition="$cates['cate_attr'] eq 1"} checked="checked" {/if}>
                                                                     <span class="text"> 列表页栏目(可以发表文章)</span>
                                                                 </label>
                                                             </div>
                                                             <div class="radio" style="float: left; padding-left:10px ">
                                                                 <label>
-                                                                    <input  name="cate_attr"  value="2"  type="radio" class="inverted" >
+                                                                    <input  name="cate_attr"  value="2" {if condition="$cates['cate_attr'] eq 2"} checked="checked" {/if} type="radio" class="inverted" >
                                                                     <span class="text"> 封面频道栏目</span>
                                                                 </label>
                                                             </div>
                                                               <div class="radio" style="float: left; padding-left:10px ">
                                                                 <label>
-                                                                    <input  name="cate_attr"  value="3"  type="radio" class="inverted" >
+                                                                    <input  name="cate_attr"  value="3" {if condition="$cates['cate_attr'] eq 3"} checked="checked" {/if} type="radio" class="inverted" >
                                                                     <span class="text"> 外链栏目</span>
                                                                 </label>
                                                             </div>
@@ -163,7 +163,7 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">列表页模板</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control"  placeholder="" name="list_tmp" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="list_tmp" type="text" value="{$cates.list_tmp}">
                                                         </div>
                                                           <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
@@ -171,7 +171,7 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">频道页模板</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control"  placeholder="" name="index_tmp" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="index_tmp" type="text" value="{$cates.index_tmp}">
                                                         </div>
                                                         <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
@@ -179,7 +179,7 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">内容页模板</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control"  placeholder="" name="article_tmp" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="article_tmp" type="text" value="{$cates.article_tmp}">
                                                         </div>
                                                         <p class="help-block col-sm-4 red">* 必填</p>
                                                     </div>
@@ -187,7 +187,7 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">外链地址</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control"  placeholder="" name="link" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="link" type="text" value="{$cates.link}">
                                                         </div>
                                                           <p class="help-block col-sm-4 red">* 请用http://开头</p>
                                                     </div>
@@ -199,21 +199,21 @@
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目标题</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control"  placeholder="" name="title" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="title" type="text" value="{$cates.title}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目关键词</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <input class="form-control"  placeholder="" name="keywords" type="text" value="">
+                                                            <input class="form-control"  placeholder="" name="keywords" type="text" value="{$cates.keywords}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="username" class="col-sm-2 control-label no-padding-right">栏目描述</label>
                                                         <div class="col-sm-6">
                                                             <!--单行文本-->
-                                                            <textarea name="desc" class="form-control" id="" ></textarea>
+                                                            <textarea name="desc" class="form-control" id="" >{$cates.desc}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -223,7 +223,7 @@
 
                                                             <div class="widget-body">
                                                                 <div class="widget-main no-padding">
-                                                                    <textarea name="content" id="content" ></textarea>
+                                                                    <textarea name="content" id="content" >{$cates.content}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>

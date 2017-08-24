@@ -6,7 +6,7 @@ class Cate extends Model
 
     public function  catetree()
     {
-        $cateRes = $this->order('id desc')->select();
+        $cateRes = $this->order('sort desc')->select();
         return $this->cateSort($cateRes);
 
     }
@@ -29,6 +29,48 @@ class Cate extends Model
             }
         }
         return $arr;
+    }
+    //获取子栏目ID
+    public function cateDelId($cateid)
+    {
+        $data = db('cate')->field('id,pid')->select();
+        return $this->_cateDelId($data,$cateid);
+    }
+
+    public function _cateDelId($data,$cateid)
+    {
+        static $arr = array();
+        foreach ($data as $key => $value) {
+            if($value['pid'] == $cateid){
+                $arr[] = $value['id'];
+                //进行递归
+                $this->_cateDelId($data,$value['id']);
+            }
+        }
+        return $arr;
+    }
+    //批量删除
+    public function pdel($srt)
+    {
+        foreach ($srt as $key => $value) {
+                $info[] = $this->cateDelId($value);
+                $info[] = $value;
+            }
+            $info_array = array();
+            foreach ($info as $k => $v) {
+              if(is_array($v)){
+                foreach ($v as $key => $value) {
+                    $info_array[] = $value;
+                }
+              }else{
+                $info_array[] = $v;
+              }
+            }
+            $info_array= array_unique($info_array);
+            // p($info_array);die;
+            $obj = $this::destroy($info_array);
+
+            return $obj;
     }
 
 }

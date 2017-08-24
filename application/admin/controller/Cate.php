@@ -49,12 +49,16 @@ class Cate extends Common
         }
         //栏目获取
         $cateRes = model('cate')->catetree();
-        $this->assign('cateRes',$cateRes);
+        $cateid = input('cate_id');
+        $this->assign(array(
+            'cateRes'=>$cateRes,
+            'cateid' =>$cateid,
+            ));
         return view();
     }
     /**
      * [cateStatus 栏目状态]
-     * @return [type] [description]
+     * @return [type] [获取ajax传递过来id 进行更改状态  0.隐藏 1.显示 ]
      */
     public function cateStatus()
     {
@@ -74,6 +78,71 @@ class Cate extends Common
         }else{
             return json(array('msg'=>'202','text'=>'访问方式错误'));
         }
+    }
+    /**
+     * [cateSort 栏目进行排序]
+     * @return [type] [description]
+     */
+    public function cateSort()
+    {
+        if(request()->isAjax()){
+            $sort = input('sort');
+            $cateid = input('id');
+            if(!is_numeric($cateid) || !$cateid || !is_numeric($sort) || !$sort){
+                return json(array('msg'=>'202','text'=>'非法ID或非法数字'));
+            }
+            $info['sort'] = $sort;
+            $data = db('cate')->where(array('id'=>$cateid))->update($info);
+            if($data){
+                 return json(array('msg'=>'200','text'=>'排序成功'));
+            }else{
+                return json(array('msg'=>'201','text'=>'排序失败'));
+            }
+
+        }else{
+            return json(array('msg'=>'202','text'=>'访问方式错误'));
+        }
+    }
+    /**
+     * [cateDel 单ID删除]
+     * @return [type] [description]
+     */
+    public function cateDel()
+    {
+        if(request()->isAjax()){
+            $cateid = input('cateid');
+            $srt = input('srt');
+            $srt = json_decode($srt);
+            if($srt){
+                $info = model('cate')->pdel($srt);
+                if($info){
+                    return json(array('msg'=>'200','text'=>'删除成功'));
+                }else{
+                    return json(array('msg'=>'201','text'=>'删除失败'));
+                }
+            }
+            $data = model('cate')->cateDelId($cateid);
+            $data[] = $cateid;
+            $del = db('cate')->delete($data);
+            if($del){
+                return json(array('msg'=>'200','text'=>'删除成功'));
+            }else{
+                return json(array('msg'=>'202','text'=>'删除失败'));
+            }
+        }else{
+            return json(array('msg'=>'202','text'=>'访问方式错误'));
+        }
+    }
+    public function edit()
+    {
+
+        $cateid = input('cateid');
+        $cates = db('cate')->find($cateid);
+        $this->assign(array(
+            // 'cateRes'=>$cateRes,
+            'cates' =>$cates,
+            ));
+        return view();
     }
 
 }

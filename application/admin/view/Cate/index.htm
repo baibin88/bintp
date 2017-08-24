@@ -50,6 +50,8 @@
 
 <button type="button" tooltip="添加栏目" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('Cate/add')}'"> <i class="fa fa-plus"></i> 添加栏目
 </button>
+<button type="button" tooltip="批量删除" class="btn btn-danger btn-sm shiny" onClick="button_del()"> <i class="fa fa-trash-o"></i> 批量删除
+</button>
 <div class="row">
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="widget">
@@ -60,7 +62,7 @@
                             <tr>
                                 <th class="text-center" width="5%">
                                     <label>
-                                        <input name="contactway[]" value="" type="checkbox" class="colred-blue">
+                                        <input id="checkall"  type="checkbox" class="colred-blue" data_id="">
                                         <span class="text"></span>
                                     </label>
                                 </th>
@@ -78,21 +80,26 @@
                              <tr>
                                 <td align="center">
                                     <label>
-                                        <input name="contactway[]" value="" type="checkbox" class="colred-blue">
+                                        <input name="itm[]" value="{$cate.id}" type="checkbox" class="colred-blue">
                                         <span class="text"></span>
                                     </label>
                                 </td>
                                 <td align="center">{$cate.id}</td>
-                                <td ><?php echo str_repeat('-',$cate['level']*4)?><a href="javascript::">{$cate.cate_name}</a></td>
+                                <td ><?php echo str_repeat('-',$cate['level']*4)?>
+                                    <a href="javascript:;">{$cate.cate_name}</a>
+                                    <a href="{:url('Cate/add',array('cate_id'=>$cate.id))}" style="float: right;" class="btn btn-sm btn-azure btn-addon">添加子栏目</a>
+                                </td>
                                 <td align="center"><a onclick="cate_ststus(this,'{$cate.id}')" {if condition="$cate['status'] eq 1"} class="btn btn-primary btn-sm shiny" {else/} class="btn btn-danger btn-sm shiny" {/if} > {if condition="$cate['status'] eq 1"}显示{else/}隐藏{/if}</a></td>
                                 <td align="center">{if condition="$cate['cate_attr'] eq 1"} 列表栏目{else/}频道封面{/if}</td>
                                 <td align="center">test</td>
-                                <td align="center"><input style="width: 40px ;text-align:center;" type="text" value="1"></td>
                                 <td align="center">
-                                    <a href="/admin/user/edit/id/6.html" class="btn btn-primary btn-sm shiny">
+                                    <input style="width: 40px ;text-align:center;"  data_id="{$cate.id}" id="catesort" type="text" value="{$cate.sort}">
+                                </td>
+                                <td align="center">
+                                    <a href="{:url('edit',array('cateid'=>$cate['id']))}" class="btn btn-primary btn-sm shiny">
                                         <i class="fa fa-edit"></i> 编辑
                                     </a>
-                                    <a href="#" onClick="warning('确实要删除吗', '/admin/user/del/id/6.html')" class="btn btn-danger btn-sm shiny">
+                                    <a href="javascript:;" onClick="cateDel('{$cate.id}')" class="btn btn-danger btn-sm shiny">
                                         <i class="fa fa-trash-o"></i> 删除
                                     </a>
                                 </td>
@@ -118,15 +125,23 @@
     </div>
 
         <!--Basic Scripts-->
-    <script src="__ADMIN__/style/jquery_002.js"></script>
+         <script src="__ADMIN__/style/jquery_002.js"></script>
     <script src="__ADMIN__/style/bootstrap.js"></script>
-    <script src="__ADMIN__/style/jquery.js"></script>
-    <script src="__ADMIN__/style/common.js"></script>
+<script src="__ADMIN__/dialog/layer.js"></script>
+<script src="__ADMIN__/dialog.js"></script>
+<script src="__ADMIN__/style/common.js"></script>
+<!--Beyond Scripts-->
+<script src="__ADMIN__/style/beyond.js"></script>
+<script src="__ADMIN__/style/summernote.js"></script>
+
     <!--Beyond Scripts-->
     <script src="__ADMIN__/style/beyond.js"></script>
     <script>
     var SCOPE = {
         'status_url' : "{:url('Cate/cateStatus')}",
+        'catesort_url' :"{:url('Cate/cateSort')}",
+        'catedel_url' : "{:url('Cate/cateDel')}",
+        'index_url' : "{:url('Cate/index')}"
       }
 
 

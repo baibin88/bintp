@@ -33,13 +33,13 @@
   //提交数据
   function cate_save_button(){
     var data = $('#cat_add').serializeArray();
-    var content = $('#summernote').code()
+    // var content = $('#summernote').code()
     postDate = {};
     $(data).each(function(i){
       postDate[this.name] = this.value;
-      postDate['content'] = content;
+      // postDate['content'] = content;
     })
-    console.log(postDate)
+    // console.log(postDate)
     var url = SCOPE.cate_addurl;
     var lsturl = SCOPE.cate_lsturl;
     $.post(url,postDate,function(data){
@@ -67,3 +67,64 @@
       }
     })
   }
+  //排序
+  $(document).on('blur','#catesort',function(){
+    var sort = $(this).val();
+    var id = $(this).attr('data_id');
+    var url  = SCOPE.catesort_url;
+    var data = {sort:sort,id:id};
+    $.post(url,data,function(data){
+      if(data.msg == 200){
+        dialog.toconfirm(data.text);
+      }else if(data.msg == 201){
+        dialog.error(data.text);
+      }else if(data.msg == 202){
+        dialog.error(data.text);
+      }
+    })
+
+ })
+  //栏目全选处理
+$(document).on('click','#checkall',function(){
+    if($('#checkall').attr('checked')){
+      // $('.colred-blue').removeAttr('checked');
+      $('.colred-blue').attr('checked',false);
+    }else{
+      $('.colred-blue').attr('checked',true);
+    }
+})
+//栏目删除
+function cateDel(id){
+    var url = SCOPE.catedel_url;
+    var cateurl = SCOPE.index_url;
+    var data = {cateid:id}
+    $.post(url,data,function(data){
+       if(data.msg ==200){
+          dialog.success(data.text,cateurl);
+       }else{
+        dialog.error(data.text);
+       }
+    });
+}
+//批量删除
+function button_del(){
+  var data = new Array();
+  var srt = new Array();
+  $('input[name="itm[]"]').each(function(i){
+    data[i]= $(this).val();
+    srt = JSON.stringify(data)
+  })
+  if($('#checkall').attr('checked')){
+      var url = SCOPE.catedel_url;
+      var cateurl = SCOPE.index_url;
+      var obj = {srt:srt}
+      $.post(url,obj,function(data){
+        if(data.msg ==200){
+          dialog.success(data.text,cateurl);
+        }else{
+          dialog.error(data.text);
+        }
+      })
+    }
+
+}
