@@ -18,7 +18,13 @@
     <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
     <link href="__ADMIN__/style/animate.css" rel="stylesheet">
     <script src="__ADMIN__/style/jquery_002.js"></script>
-    <
+    <style type="text/css">
+        .open{
+            border: 1px solid #ccc;
+            padding: 0 3px 0 3px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <!-- 头部 -->
@@ -60,6 +66,8 @@
                     <table class="table table-bordered table-hover">
                         <thead class="">
                             <tr>
+                                <th class="text-center" width="6%">伸缩</th>
+
                                 <th class="text-center" width="5%">
                                     <label>
                                         <input id="checkall"  type="checkbox" class="colred-blue" data_id="">
@@ -67,23 +75,26 @@
                                     </label>
                                 </th>
                                 <th class="text-center" width="8%">ID</th>
-                                <th class="text-center" >栏目</th>
+                                    <th class="text-center" >栏目</th>
                                 <th class="text-center" width="10%">状态</th>
                                 <th class="text-center" width="10%">属性</th>
                                 <th class="text-center" width="10%">所属模型</th>
-                                <th class="text-center" width="2%">排序</th>
+                                <th class="text-center" width="5%">排序</th>
                                 <th class="text-center" width="18%">操作</th>
                             </tr>
                         </thead>
                         <tbody>
                             {volist name="cateRes" id="cate"}
-                             <tr>
+
+                             <tr id="{$cate.id}" pid="{$cate.pid}">
+                                 <td align="center"><span class="open">+</span></td>
                                 <td align="center">
                                     <label>
                                         <input name="itm[]" value="{$cate.id}" type="checkbox" class="colred-blue">
                                         <span class="text"></span>
                                     </label>
                                 </td>
+
                                 <td align="center">{$cate.id}</td>
                                 <td ><?php echo str_repeat('-',$cate['level']*4)?>
                                     <a href="javascript:;">{$cate.cate_name}</a>
@@ -92,8 +103,9 @@
                                 <td align="center"><a onclick="cate_ststus(this,'{$cate.id}')" {if condition="$cate['status'] eq 1"} class="btn btn-primary btn-sm shiny" {else/} class="btn btn-danger btn-sm shiny" {/if} > {if condition="$cate['status'] eq 1"}显示{else/}隐藏{/if}</a></td>
                                 <td align="center">{if condition="$cate['cate_attr'] eq 1"} 列表栏目{else/}频道封面{/if}</td>
                                 <td align="center">test</td>
-                                <td align="center">
-                                    <input style="width: 40px ;text-align:center;"  data_id="{$cate.id}" id="catesort" type="text" value="{$cate.sort}">
+                                <td align="center" class="order" data-sort="{$cate.sort}" data-id="<?php echo $cate['id'];?>">
+                                    <span class="sort"><?php echo $cate['sort'];?></span>
+                                    <input class='txt_order' style='border:1px solid #ccc;text-align:center;display:none;width:40px;height:22px' type='text' value="{$cate.sort}"" />
                                 </td>
                                 <td align="center">
                                     <a href="{:url('edit',array('cateid'=>$cate['id']))}" class="btn btn-primary btn-sm shiny">
@@ -144,6 +156,62 @@
         'index_url' : "{:url('Cate/index')}"
       }
 
+    $(function() {
+        $('.order').click(function () {
+            $('.txt_order').hide();
+            $('.sort').show();
+            var datasort = $(this).attr('data-sort');
+            var sort = $(this).find('input').val();
+            $(this).find('input').val('').show().focus().val(sort).select();
+            $(this).find('span').hide();
+        });
+        $(document).on('blur', '.txt_order', function () {
+            $('.txt_order').hide();
+            var order = $(this);
+            var dataid = $(this).parent().attr('data-id');
+            var datasort = $(this).val();
+            var url = SCOPE.catesort_url;
+//            var data = {sort: sort, id: id};
+            var data = {id:dataid,sort:datasort};
+            $.post(url, data, function (data) {
+                order.hide();
+                order.prev().text(datasort).show();
+            });
+        });
+    });
+    $('tr[pid!=0]').hide();
+    $('.open').click(function () {
+        var id = $(this).parents('tr').attr('id');
+        if($(this).text() =='+'){
+            $(this).text('-');
+            $('tr[pid='+id+']').show();
+        }else{
+            $(this).text('+');
+//            $('tr[pid='+id+']').hide();
+            var url ="{:url('Cate/CateOpen')}";
+            var data = {id:id};
+            $.post(url,data,function (data) {
+
+                //遍历
+                if(data.msg =='200'){
+                    var ids = [];
+                    var sortid = $('tr[pid!=0]');
+                    sortid.each(function (k,v) {
+                        ids.push($(this).attr('id'));
+                    });
+
+                    $.each(data.text,function (k,v) {
+                        if($.inArray(v,ids)){
+                            $('tr[id='+v+']').hide();
+                        }
+                    });
+                }else{
+                    dialog.error(data.text);
+                }
+
+            })
+        }
+    });
 
 </script>
 

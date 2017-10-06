@@ -17,12 +17,12 @@
             if(data.msg=='200'){
                 var cateimgurl = cateurl+"/uploads/cateimg/"+data.img;
                 var img = data.img;
-                var cateimgsrc = "<img height='100' src='"+cateimgurl+"'>";
+                var cateimgsrc = "<img height='100' src='"+cateimgurl+"' id='catimga'/>";
                 $("#imgcat").val(img);
                 $("#cateimg").html(cateimgsrc);
                 $('#cateimgdiv').show();
             }else if(data.msg =='201'){
-              alert(data.data.img);
+                dialog.error(data.img);
             }
           },
           error:function(data){
@@ -68,22 +68,21 @@
     })
   }
   //排序
-  $(document).on('blur','#catesort',function(){
-    var sort = $(this).val();
-    var id = $(this).attr('data_id');
-    var url  = SCOPE.catesort_url;
-    var data = {sort:sort,id:id};
-    $.post(url,data,function(data){
-      if(data.msg == 200){
-        dialog.toconfirm(data.text);
-      }else if(data.msg == 201){
-        dialog.error(data.text);
-      }else if(data.msg == 202){
-        dialog.error(data.text);
-      }
-    })
-
- })
+ //  $(document).on('blur','#catesort',function(){
+ //    var sort = $(this).val();
+ //    var id = $(this).attr('data_id');
+ //
+ //    $.post(url,data,function(data){
+ //      if(data.msg == 200){
+ //        dialog.toconfirm(data.text);
+ //      }else if(data.msg == 201){
+ //        dialog.error(data.text);
+ //      }else if(data.msg == 202){
+ //        dialog.error(data.text);
+ //      }
+ //    })
+ //
+ // })
   //栏目全选处理
 $(document).on('click','#checkall',function(){
     if($('#checkall').attr('checked')){
@@ -97,7 +96,7 @@ $(document).on('click','#checkall',function(){
 function cateDel(id){
     var url = SCOPE.catedel_url;
     var cateurl = SCOPE.index_url;
-    var data = {cateid:id}
+    var data = {cateid:id};
     $.post(url,data,function(data){
        if(data.msg ==200){
           dialog.success(data.text,cateurl);
@@ -117,7 +116,7 @@ function button_del(){
   if($('#checkall').attr('checked')){
       var url = SCOPE.catedel_url;
       var cateurl = SCOPE.index_url;
-      var obj = {srt:srt}
+      var obj = {srt:srt};
       $.post(url,obj,function(data){
         if(data.msg ==200){
           dialog.success(data.text,cateurl);
@@ -128,3 +127,22 @@ function button_del(){
     }
 
 }
+//栏目的图片
+    function delload() {
+        var imgurl = $('#imgcat').val();
+        var id = $('#imgcat').attr('data-id');
+        if(!imgurl){
+            dialog.error('请上传图片'); return;
+        }
+        var url = SCOPE.cate_delimg;
+        var data = {imgurl:imgurl,id:id};
+        $.post(url,data,function (data) {
+            if(data.msg =='200'){
+                $('#imgcat').val('');
+                $('#catimga').attr('src','');
+                dialog.toconfirm('撤销成功');
+            }else{
+                dialog.error('撤销失败');
+            }
+        });
+    }
